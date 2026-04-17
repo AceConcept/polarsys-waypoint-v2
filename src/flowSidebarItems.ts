@@ -1,48 +1,81 @@
 import type { FlowStepId } from './store/flowStore'
 
-/** Luna sidebar cards — `id` matches `FlowStepId` for store sync. */
-export const FLOW_SIDEBAR_ITEMS: {
+/**
+ * Luna drawer + preview rail — titles, descriptions, optional **thumbUrl** / **heroImageUrl** (`public/` paths).
+ */
+export type FlowSidebarItem = {
   id: FlowStepId
   label: string
   step: string
   title: string
   description: string
   swatch: string
-}[] = [
+  thumbUrl?: string
+  heroImageUrl?: string
+}
+
+const STEP_IMAGE = '/alphinaud.webp'
+const STEP_DESC = 'Test Description'
+
+export const FLOW_SIDEBAR_ITEMS: FlowSidebarItem[] = [
   {
-    id: 'welcome',
-    label: 'WELCOME',
+    id: '1',
+    label: 'Step 1',
     step: 'Step 1',
-    title: 'Welcome',
-    description:
-      'Begin the flow here. Use Next in the main panel or pick another step from this rail.',
+    title: 'Step 1',
+    description: STEP_DESC,
     swatch: '#e8e4f0',
+    thumbUrl: STEP_IMAGE,
+    heroImageUrl: STEP_IMAGE,
   },
   {
-    id: 'details',
-    label: 'DETAILS',
+    id: '2',
+    label: 'Step 2',
     step: 'Step 2',
-    title: 'Details',
-    description:
-      'Shared state lives in Zustand — the center panel and this sidebar both reflect the same step.',
-    swatch: '#d4c8e8',
+    title: 'Step 2',
+    description: STEP_DESC,
+    swatch: '#e2dcf0',
+    thumbUrl: STEP_IMAGE,
+    heroImageUrl: STEP_IMAGE,
   },
   {
-    id: 'review',
-    label: 'REVIEW',
+    id: '3',
+    label: 'Step 3',
     step: 'Step 3',
-    title: 'Review',
-    description:
-      'Confirm everything looks right before the final step.',
-    swatch: '#c0b0dc',
+    title: 'Step 3',
+    description: STEP_DESC,
+    swatch: '#dcd4ec',
+    thumbUrl: STEP_IMAGE,
+    heroImageUrl: STEP_IMAGE,
   },
   {
-    id: 'done',
-    label: 'DONE',
+    id: '4',
+    label: 'Step 4',
     step: 'Step 4',
-    title: 'Done',
-    description:
-      'You reached the end. Start over in the main panel resets the whole flow.',
-    swatch: '#9b7fc4',
+    title: 'Step 4',
+    description: STEP_DESC,
+    swatch: '#d6cae8',
+    thumbUrl: STEP_IMAGE,
+    heroImageUrl: STEP_IMAGE,
+  },
+  {
+    id: '5',
+    label: 'Step 5',
+    step: 'Step 5',
+    title: 'Step 5',
+    description: STEP_DESC,
+    swatch: '#d0c0e4',
+    thumbUrl: STEP_IMAGE,
+    heroImageUrl: STEP_IMAGE,
+  },
+  {
+    id: '6',
+    label: 'Step 6',
+    step: 'Step 6',
+    title: 'Step 6',
+    description: STEP_DESC,
+    swatch: '#cab6e0',
+    thumbUrl: STEP_IMAGE,
+    heroImageUrl: STEP_IMAGE,
   },
 ]

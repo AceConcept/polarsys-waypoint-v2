@@ -1,0 +1,178 @@
+/*
+  App-owned shell: gutters, artboard scale, scrim, footer, docked sidebar overrides.
+  Load after LunaSidebar.css so :root tokens (--canvas-w, --canvas-h, etc.) exist.
+*/
+
+.luna-root {
+  position: relative;
+  width: 100%;
+  min-height: 100%;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  overflow-x: hidden;
+  overflow-y: visible;
+  background: #d8d8d8;
+  --luna-space-left-bg: #d8d8d8;
+  --luna-space-right-bg: #d8d8d8;
+}
+
+.luna-scale-stage {
+  width: 100%;
+}
+
+.luna-chrome {
+  width: 100%;
+}
+
+.luna-shell {
+  width: 100%;
+}
+
+.luna-canvas-row {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  width: 100%;
+  min-height: var(--luna-canvas-row-min-h, 1px);
+  overflow: hidden;
+}
+
+.luna-canvas-row-scrim {
+  position: absolute;
+  inset: 0;
+  z-index: 35;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  appearance: none;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.luna-space-left,
+.luna-space-right {
+  flex: 1 1 0;
+  min-width: 0;
+  min-height: var(--luna-canvas-row-min-h, 1px);
+}
+
+.luna-space-left {
+  background: var(--luna-space-left-bg);
+}
+
+.luna-space-right {
+  background: var(--luna-space-right-bg);
+}
+
+/* Center column: flex slot between gutters; width = scaled canvas footprint in px */
+.luna-chrome .luna-center-column {
+  position: relative;
+  flex: 0 0 auto;
+  width: var(--luna-center-column-width);
+  min-width: 0;
+  overflow: hidden;
+}
+
+.luna-chrome .luna-center-column > .luna-design-surface {
+  position: relative;
+  z-index: 40;
+}
+
+.luna-chrome
+  .luna-center-column
+  > .luna-design-surface.luna-design-surface--drawer-open {
+  pointer-events: none;
+}
+
+/* Design rem 160×90 + scale — the “2560×1440” logical canvas */
+.luna-chrome .luna-design-surface {
+  width: var(--canvas-w);
+  height: var(--canvas-h);
+  transform: scale(var(--luna-scale));
+  transform-origin: 0 0;
+  position: relative;
+}
+
+/* Stage / flow plate inside design surface (scales with parent transform) */
+.luna-chrome .luna-stage {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  padding: 2rem calc(var(--sidebar-collapsed) + 2rem) 2rem 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: auto;
+}
+
+/* Full-bleed content (e.g. steps-project-slot): no inset plate — fills entire design surface */
+.luna-chrome .luna-stage.luna-stage--fill {
+  padding: 0;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+}
+
+.luna-chrome .luna-stage.luna-stage--fill > * {
+  flex: 1 1 auto;
+  min-height: 0;
+  min-width: 0;
+  width: 100%;
+}
+
+.luna-chrome .luna-stage-artboard {
+  width: min(104rem, 100%);
+  aspect-ratio: 2.19 / 1;
+  border: 0.0625rem solid rgba(0, 0, 0, 0.08);
+  border-radius: 0.75rem;
+  background: #f6f5f4;
+  box-shadow: inset 0 0 0 0.0625rem rgba(255, 255, 255, 0.5);
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  overflow: auto;
+}
+
+.luna-root > .luna-footer-slot {
+  position: relative;
+  overflow: hidden;
+  flex: 0 0 auto;
+  align-self: stretch;
+  width: 100%;
+  background-color: #0a0a0a;
+  background-repeat: repeat;
+  background-position: 0 0;
+  background-size: auto;
+}
+
+.luna-root > .luna-footer-slot > .luna-footer-artboard {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: var(--canvas-w);
+  height: var(--page-row-otf-footer-h);
+  transform: scale(var(--luna-scale));
+  transform-origin: 0 0;
+  background: transparent;
+  pointer-events: none;
+}
+
+/* Docked sidebar: same scale as design surface, design-sized box before transform */
+.luna-canvas-row > .sidebar-shell.UxzaHe.luna-sidebar-dock {
+  z-index: 45;
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: var(--luna-shell-design-w) !important;
+  height: var(--canvas-h);
+  transform: scale(var(--luna-scale));
+  transform-origin: top right;
+  pointer-events: none;
+}
+
+.luna-canvas-row > .sidebar-shell.UxzaHe.luna-sidebar-dock.m2T_PB {
+  pointer-events: auto;
+}

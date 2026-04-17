@@ -1,33 +1,19 @@
 import { create } from 'zustand'
 
-/** Named “states” in the flow — each maps to one screen. */
-export type FlowStepId = 'welcome' | 'details' | 'review' | 'done'
+/** Sidebar / shell step ids — one per step in `steps-project-slot` (upstream). */
+export type FlowStepId = '1' | '2' | '3' | '4' | '5' | '6'
 
 export const FLOW_STEPS: {
   id: FlowStepId
   title: string
   body: string
 }[] = [
-  {
-    id: 'welcome',
-    title: 'Welcome',
-    body: 'This is the first step. Use Next to move forward in the flow.',
-  },
-  {
-    id: 'details',
-    title: 'Details',
-    body: 'Step two — your shared state lives in Zustand, so any component can read or update it.',
-  },
-  {
-    id: 'review',
-    title: 'Review',
-    body: 'Almost there. Back and Next always change the same step index in the store.',
-  },
-  {
-    id: 'done',
-    title: 'Done',
-    body: 'You reached the last step. Start over resets the flow to step one.',
-  },
+  { id: '1', title: 'Step 1', body: '' },
+  { id: '2', title: 'Step 2', body: '' },
+  { id: '3', title: 'Step 3', body: '' },
+  { id: '4', title: 'Step 4', body: '' },
+  { id: '5', title: 'Step 5', body: '' },
+  { id: '6', title: 'Step 6', body: '' },
 ]
 
 type FlowState = {

@@ -1,22 +1,44 @@
 import { LunaSidebar } from '../luna-sidebar/src/luna-sidebar/index.js'
+import { LunaChrome } from './luna/LunaChrome'
+import StepsScreen from 'stepscreen/src/App.tsx'
+import 'stepscreen/src/App.css'
 import { FLOW_SIDEBAR_ITEMS } from './flowSidebarItems'
 import { useFlowStep, useFlowStore } from './store/flowStore'
 import './App.css'
 
 function App() {
-  const { step } = useFlowStep()
+  const { step, stepIndex } = useFlowStep()
   const goToStepById = useFlowStore((s) => s.goToStepById)
 
+  if (typeof window !== 'undefined') {
+    try {
+      sessionStorage.setItem('atencium-step', String(stepIndex + 1))
+    } catch {
+      /* ignore */
+    }
+  }
+
   return (
-    <LunaSidebar
-      items={FLOW_SIDEBAR_ITEMS}
-      initialActiveId={step.id}
-      onActiveItemChange={(id) => {
-        const hit = FLOW_SIDEBAR_ITEMS.find((item) => item.id === id)
-        if (hit) goToStepById(hit.id)
-      }}
-      railLabel="FLOW"
-    />
+    <LunaChrome
+      footerBackgroundUrl="/news_bg.jpg"
+      sidebar={({ expanded, onExpandedChange }) => (
+        <LunaSidebar
+          items={FLOW_SIDEBAR_ITEMS}
+          expanded={expanded}
+          onExpandedChange={onExpandedChange}
+          initialActiveId={step.id}
+          onActiveItemChange={(id) => {
+            const hit = FLOW_SIDEBAR_ITEMS.find((item) => item.id === id)
+            if (hit) goToStepById(hit.id)
+          }}
+          railLabel="FLOW"
+        />
+      )}
+    >
+      <div className="luna-stage luna-stage--fill">
+        <StepsScreen key={stepIndex} />
+      </div>
+    </LunaChrome>
   )
 }
 
