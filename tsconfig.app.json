@@ -19,7 +19,7 @@
     "baseUrl": ".",
     "paths": {
       "@assets/*": ["src/assets/*"],
-      "slider-sidebar/*": ["node_modules/slider-sidebar/*"],
+      "waypoint-sidebar/*": ["node_modules/waypoint-sidebar/*"],
       "stepscreen/*": ["node_modules/stepscreen/*"]
     },
 

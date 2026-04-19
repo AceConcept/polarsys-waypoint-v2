@@ -1,5 +1,5 @@
 import { useLayoutEffect, useRef, useState, type ReactNode } from 'react'
-import { LunaCanvasScaleContext } from 'slider-sidebar/src/luna-sidebar/index.js'
+import { LunaCanvasScaleContext } from 'waypoint-sidebar/src/luna-sidebar/index.js'
 import {
   CANVAS_H,
   CANVAS_W,
@@ -7,7 +7,7 @@ import {
   getOtfFooterDesignHeightPx,
   getSidebarShellDesignWidthPx,
   getViewportSize,
-} from 'slider-sidebar/src/luna-sidebar/canvasScale.js'
+} from 'waypoint-sidebar/src/luna-sidebar/canvasScale.js'
 import './lunaChrome.css'
 
 /** Center slot footprint vs contain scale (~10% shorter; width scales same factor → same aspect ratio). */

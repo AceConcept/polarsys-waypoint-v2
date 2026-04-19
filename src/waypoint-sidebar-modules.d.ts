@@ -1,5 +1,5 @@
-/** Types for GitHub-installed `slider-sidebar` (waypoint-sidebar) JS entry points */
-declare module 'slider-sidebar/src/luna-sidebar/index.js' {
+/** Git-installed `waypoint-sidebar` (AceConcept/waypoint-sidebar) JS entry points */
+declare module 'waypoint-sidebar/src/luna-sidebar/index.js' {
   import type { ComponentType, Context } from 'react'
 
   export const LunaCanvasScaleContext: Context<number>
@@ -18,7 +18,7 @@ declare module 'slider-sidebar/src/luna-sidebar/index.js' {
   export const LunaSidebar: ComponentType<LunaSidebarProps>
 }
 
-declare module 'slider-sidebar/src/luna-sidebar/canvasScale.js' {
+declare module 'waypoint-sidebar/src/luna-sidebar/canvasScale.js' {
   export const CANVAS_H: number
   export const CANVAS_W: number
   export function getCanvasContainScale(width: number, height: number): number

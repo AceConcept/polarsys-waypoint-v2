@@ -1,4 +1,4 @@
-import { LunaSidebar } from 'slider-sidebar/src/luna-sidebar/index.js'
+import { LunaSidebar } from 'waypoint-sidebar/src/luna-sidebar/index.js'
 import { LunaChrome } from './luna/LunaChrome'
 import WaypointStepsScreen from './steps/WaypointStepsScreen'
 import { FLOW_SIDEBAR_ITEMS } from './flowSidebarItems'

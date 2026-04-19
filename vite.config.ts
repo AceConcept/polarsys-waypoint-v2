@@ -5,21 +5,34 @@ import react from '@vitejs/plugin-react'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
-/** Same package as `stepscreen` dep — submodule optional for local dev only */
-const stepscreenPkgRoot = path.resolve(__dirname, 'node_modules/stepscreen')
+const reactRoot = path.resolve(__dirname, 'node_modules/react')
+const reactDomRoot = path.resolve(__dirname, 'node_modules/react-dom')
+const waypointSidebarRoot = path.resolve(__dirname, 'node_modules/waypoint-sidebar')
+const stepscreenRoot = path.resolve(__dirname, 'node_modules/stepscreen')
 
-// https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
   resolve: {
+    /** `waypoint-sidebar` ships React 18; app uses React 19 — one copy or hooks break → blank UI */
+    dedupe: ['react', 'react-dom'],
     alias: {
+      react: reactRoot,
+      'react-dom': reactDomRoot,
       '@assets': path.resolve(__dirname, 'src/assets'),
-      stepscreen: stepscreenPkgRoot,
+      'waypoint-sidebar': waypointSidebarRoot,
+      stepscreen: stepscreenRoot,
     },
+  },
+  optimizeDeps: {
+    include: [
+      'waypoint-sidebar/src/luna-sidebar/index.js',
+      'waypoint-sidebar/src/luna-sidebar/LunaSidebar.jsx',
+      'waypoint-sidebar/src/luna-sidebar/LunaScaledArtboard.jsx',
+    ],
   },
   server: {
     fs: {
-      allow: [path.resolve(__dirname, '..'), stepscreenPkgRoot],
+      allow: [path.resolve(__dirname, '..'), waypointSidebarRoot, stepscreenRoot],
     },
   },
 })
