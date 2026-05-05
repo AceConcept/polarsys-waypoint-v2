@@ -12,6 +12,7 @@ declare module 'waypoint-sidebar/src/luna-sidebar/index.js' {
     onActiveItemChange?: (id: string) => void
     onInfo?: () => void
     infoHref?: string
+    infoOpenInNewTab?: boolean
     infoTooltip?: string
     railLabel?: string
     graphicSrc?: string

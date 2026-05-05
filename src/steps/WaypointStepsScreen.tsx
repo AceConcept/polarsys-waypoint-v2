@@ -1,6 +1,5 @@
 import { useEffect, useRef } from 'react'
 import { polarFlowIdFromHash, useFlowStore } from '../store/flowStore'
-import 'stepscreen/src/styles.css'
 
 const ARTBOARD_WIDTH = 2560
 const ARTBOARD_HEIGHT = 1440
@@ -11,10 +10,6 @@ type WaypointStepsScreenProps = {
 
 export default function WaypointStepsScreen({ polarHash }: WaypointStepsScreenProps) {
   const hostRef = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
-    void import('stepscreen')
-  }, [])
 
   useEffect(() => {
     if (typeof window === 'undefined') return
@@ -82,8 +77,18 @@ export default function WaypointStepsScreen({ polarHash }: WaypointStepsScreenPr
   return (
     <div ref={hostRef} className="viewport">
       <div id="scale-frame" className="scale-frame">
-        <div id="artboard" className="artboard">
-          <div id="app" className="app" />
+        <div
+          id="artboard"
+          className="artboard"
+          style={{
+            width: ARTBOARD_WIDTH,
+            height: ARTBOARD_HEIGHT,
+            transformOrigin: 'top left',
+          }}
+        >
+          <div className="stepscreen-placeholder" role="status">
+            File shows up here
+          </div>
         </div>
       </div>
     </div>

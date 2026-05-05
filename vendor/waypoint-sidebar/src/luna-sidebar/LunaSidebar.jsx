@@ -12,8 +12,6 @@ import "./LunaSidebar.css";
 
 const PREVIEW_SCROLLBAR_MIN_THUMB_PX = 24;
 
-const DEFAULT_INFO_HREF =
-  "https://www.atencium-ui.com/design-gallery/polar-systems";
 const DEFAULT_INFO_TOOLTIP = "More Information";
 
 function parseCssLengthToPx(raw) {
@@ -273,8 +271,12 @@ function IntroSection({
   onStart,
   onInfo,
   infoHref,
+  infoOpenInNewTab = true,
   infoTooltip,
 }) {
+  const trimmedHref =
+    typeof infoHref === "string" ? infoHref.trim() : "";
+  const isInfoLink = trimmedHref.length > 0;
   return (
     <div className="intro-section">
       <div className="intro-hero" aria-hidden="true">
@@ -304,18 +306,35 @@ function IntroSection({
           <button className="start-btn" type="button" onClick={onStart}>
             Start
           </button>
-          <a
-            className="intro-info-btn"
-            href={infoHref}
-            target="_blank"
-            rel="noopener noreferrer"
-            data-luna-sidebar-part="intro-info-btn"
-            title={infoTooltip}
-            aria-label={`${infoTooltip} (opens in new tab)`}
-            onClick={() => onInfo?.()}
-          >
-            <InfoIcon />
-          </a>
+          {isInfoLink ? (
+            <a
+              className="intro-info-btn"
+              href={trimmedHref}
+              target={infoOpenInNewTab ? "_blank" : undefined}
+              rel={infoOpenInNewTab ? "noopener noreferrer" : undefined}
+              data-luna-sidebar-part="intro-info-btn"
+              title={infoTooltip}
+              aria-label={
+                infoOpenInNewTab
+                  ? `${infoTooltip} (opens in new tab)`
+                  : infoTooltip
+              }
+              onClick={() => onInfo?.()}
+            >
+              <InfoIcon />
+            </a>
+          ) : (
+            <button
+              type="button"
+              className="intro-info-btn"
+              data-luna-sidebar-part="intro-info-btn"
+              title={infoTooltip}
+              aria-label={infoTooltip}
+              onClick={() => onInfo?.()}
+            >
+              <InfoIcon />
+            </button>
+          )}
         </div>
       </div>
     </div>
@@ -331,9 +350,10 @@ function IntroSection({
  * @param {boolean} [props.expanded] — controlled drawer; omit for uncontrolled (uses defaultExpanded)
  * @param {string} [props.railLabel]
  * @param {(id: string) => void} [props.onActiveItemChange] — fired when user clicks **Start** (not on preview strip taps)
- * @param {() => void} [props.onInfo] — optional; fired when user activates the info link
- * @param {string} [props.infoHref] — URL for the info control (default: Polar Systems gallery)
- * @param {string} [props.infoTooltip] — native tooltip + aria (default: “More Information”)
+ * @param {() => void} [props.onInfo] — optional; fired when user activates the info control
+ * @param {string} [props.infoHref] — if set, info control is a link to this URL; otherwise a plain button
+ * @param {boolean} [props.infoOpenInNewTab] — when `infoHref` is set, open in a new tab (default: true)
+ * @param {string} [props.infoTooltip] — native tooltip + aria for the info button (default: “More Information”)
  * @param {(open: boolean) => void} [props.onExpandedChange]
  */
 export function LunaSidebar({
@@ -345,7 +365,8 @@ export function LunaSidebar({
   railLabel = "LUNA STATE MANAGER",
   onActiveItemChange,
   onInfo,
-  infoHref = DEFAULT_INFO_HREF,
+  infoHref,
+  infoOpenInNewTab = true,
   infoTooltip = DEFAULT_INFO_TOOLTIP,
   onExpandedChange,
 }) {
@@ -496,6 +517,7 @@ export function LunaSidebar({
                     onStart={handleStart}
                     onInfo={onInfo}
                     infoHref={infoHref}
+                    infoOpenInNewTab={infoOpenInNewTab}
                     infoTooltip={infoTooltip}
                   />
                   <PreviewStrip

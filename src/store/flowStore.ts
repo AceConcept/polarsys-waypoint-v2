@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import { STEP_DESCRIPTIONS } from '../stepDescriptions'
+import { STEP_DESCRIPTIONS, STEP_TITLES } from '../stepDescriptions'
 
 /** Polar-sys hash routes — one sidebar step per page. */
 export type FlowStepId = 'anomaly' | 'monitor' | 'incident'
@@ -26,12 +26,7 @@ export const FLOW_STEPS: {
   body: string
 }[] = IDS.map((id, i) => ({
   id,
-  title:
-    id === 'anomaly'
-      ? 'Anomaly'
-      : id === 'monitor'
-        ? 'Monitor'
-        : 'Incident',
+  title: STEP_TITLES[i] ?? STEP_TITLES[0],
   body: STEP_DESCRIPTIONS[i] ?? '',
 }))
 

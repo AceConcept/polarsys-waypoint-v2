@@ -501,15 +501,23 @@
   background: rgba(28, 28, 28, 0.92);
   color: rgba(255, 255, 255, 0.85);
   cursor: pointer;
+  font: inherit;
   text-decoration: none;
-}
-
-.intro-info-btn:visited {
-  color: rgba(255, 255, 255, 0.85);
+  appearance: none;
+  -webkit-appearance: none;
 }
 
 .intro-info-btn:hover {
   filter: brightness(1.12);
+}
+
+a.intro-info-btn:visited {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.intro-info-btn:focus-visible {
+  outline: 0.125rem solid rgba(255, 255, 255, 0.5);
+  outline-offset: 0.125rem;
 }
 
 .intro-info-btn__icon {
