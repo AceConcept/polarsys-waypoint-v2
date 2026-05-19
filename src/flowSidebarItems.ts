@@ -10,12 +10,14 @@ export type FlowSidebarItem = {
   step: string
   title: string
   description: string
+  /** Preview list line under step label; defaults to `description` when omitted. */
+  previewDescription?: string
   swatch: string
   thumbUrl?: string
   heroImageUrl?: string
 }
 
-function placeholderImagePath(n: 1 | 2 | 3 | 4): string {
+function placeholderImagePath(n: 1 | 2 | 3 | 4 | 5 | 6): string {
   const base = `/step_imgs/placeholder-${n}.svg`
   const v = typeof __STEP_IMG_VER__ !== 'undefined' && __STEP_IMG_VER__
     ? __STEP_IMG_VER__
@@ -23,7 +25,14 @@ function placeholderImagePath(n: 1 | 2 | 3 | 4): string {
   return v ? `${base}?v=${encodeURIComponent(v)}` : base
 }
 
-const SWATCHES = ['#e8e4f0', '#cab6e0', '#dcd4ec', '#e4dce8'] as const
+const SWATCHES = [
+  '#e8e4f0',
+  '#cab6e0',
+  '#dcd4ec',
+  '#e4dce8',
+  '#d8cfe8',
+  '#cfc8e0',
+] as const
 
 export const FLOW_SIDEBAR_ITEMS: FlowSidebarItem[] = FLOW_STEPS.map((step, i) => ({
   id: step.id,
@@ -31,9 +40,9 @@ export const FLOW_SIDEBAR_ITEMS: FlowSidebarItem[] = FLOW_STEPS.map((step, i) =>
   step: STEP_TITLES[i] ?? STEP_TITLES[0],
   title: STEP_TITLES[i] ?? STEP_TITLES[0],
   description: STEP_DESCRIPTIONS[i] ?? STEP_DESCRIPTIONS[0],
+  previewDescription: '-',
   swatch: SWATCHES[i] ?? SWATCHES[0],
-  thumbUrl: placeholderImagePath((i + 1) as 1 | 2 | 3 | 4),
   heroImageUrl: placeholderImagePath(
-    ((i < 3 ? i + 1 : 3) as 1 | 2 | 3 | 4),
+    (Math.min(i + 1, 4) as 1 | 2 | 3 | 4),
   ),
 }))

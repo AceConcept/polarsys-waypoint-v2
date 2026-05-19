@@ -31,11 +31,12 @@ export default defineConfig({
     },
   },
   optimizeDeps: {
-    include: [
-      'waypoint-sidebar/src/luna-sidebar/index.js',
+    /* Prebundling LunaSidebar.jsx freezes JSX; app items (e.g. previewDescription) won’t update until cache clear. */
+    exclude: [
       'waypoint-sidebar/src/luna-sidebar/LunaSidebar.jsx',
-      'waypoint-sidebar/src/luna-sidebar/LunaScaledArtboard.jsx',
+      'waypoint-sidebar/src/luna-sidebar/index.js',
     ],
+    include: ['waypoint-sidebar/src/luna-sidebar/LunaScaledArtboard.jsx'],
   },
   server: {
     fs: {

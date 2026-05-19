@@ -1,5 +1,5 @@
-import { LunaSidebar } from 'waypoint-sidebar/src/luna-sidebar/index.js'
 import { LunaChrome } from './luna/LunaChrome'
+import { WaypointSidebar } from './luna/WaypointSidebar'
 import WaypointStepsScreen from './steps/WaypointStepsScreen'
 import { FLOW_SIDEBAR_ITEMS } from './flowSidebarItems'
 import { POLAR_SYS_HASH, useFlowStep, useFlowStore } from './store/flowStore'
@@ -24,27 +24,17 @@ function App() {
       footerBackgroundUrl="/news_bg.jpg"
       sidebar={({ expanded, onExpandedChange }) => (
         <div className="waypoint-sidebar">
-          <LunaSidebar
+          <WaypointSidebar
             items={FLOW_SIDEBAR_ITEMS}
             expanded={expanded}
             onExpandedChange={onExpandedChange}
             initialActiveId={step.id}
-            onActiveItemChange={(id: string) => {
+            onActiveItemChange={(id) => {
               const hit = FLOW_SIDEBAR_ITEMS.find((item) => item.id === id)
               if (hit) goToStepById(hit.id)
             }}
             railLabel={RAIL_LABEL}
           />
-          {/*
-            Visual rail outside .sidebar-shell so it does not share animating width / scaled transform.
-            The in-package <button class="sidebar-rail"> stays the click target; pointer-events: none
-            on the overlay lets clicks pass through.
-          */}
-          <div className="luna-rail-overlay" aria-hidden="true">
-            <span className="luna-rail-overlay__dot" />
-            <span className="luna-rail-overlay__text">{RAIL_LABEL}</span>
-            <span className="luna-rail-overlay__dot" />
-          </div>
         </div>
       )}
     >

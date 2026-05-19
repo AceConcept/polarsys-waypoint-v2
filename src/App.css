@@ -314,116 +314,92 @@
   font-family: inherit;
 }
 
-/* Luna sidebar: package uses all-caps for step list + Start; use normal casing */
-.luna-canvas-row .preview-card__step-label {
+/* Left story column: always Inter (not inside .sidebar-shell / Figtree) */
+.luna-space-left,
+.luna-space-left h2.content-story-title,
+.luna-space-left .description-text,
+.luna-space-left .content-button {
+  font-family: Inter, system-ui, sans-serif;
+}
+
+/* Waypoint sidebar (app-owned): square corners on hero + thumbs */
+.luna-root .wp-sidebar__hero,
+.luna-root .wp-sidebar__hero-plate,
+.luna-root .wp-sidebar__thumb,
+.luna-root .wp-sidebar__thumb-image {
+  border-radius: 0;
+}
+
+/* Hero + preview thumbs: step swatch color (set inline); hide placeholder artwork */
+.luna-root .wp-sidebar__hero-image,
+.luna-root .wp-sidebar__card-media .wp-sidebar__thumb-image,
+.luna-root .wp-sidebar__card-media .wp-sidebar__thumb-index {
+  display: none;
+}
+
+/* Preview list: show "-" under step label (see flowSidebarItems.previewDescription) */
+.luna-canvas-row .wp-sidebar__card .wp-sidebar__card-desc {
+  font-size: 0;
+  line-height: 0;
+  color: transparent;
+  -webkit-line-clamp: unset;
+  overflow: visible;
+}
+
+.luna-canvas-row .wp-sidebar__card .wp-sidebar__card-desc::after {
+  content: '-';
+  font-size: 1.25rem;
+  line-height: 1.35;
+  letter-spacing: -0.04em;
+  color: #404040;
+  display: block;
+}
+
+.luna-canvas-row .wp-sidebar__card-step {
+  font-size: 1.25rem; /* 20px @ 16px/rem */
+  font-weight: 400;
   text-transform: none;
 }
 
-.luna-canvas-row .start-btn {
+.luna-canvas-row .wp-sidebar__start {
   text-transform: none;
   letter-spacing: 0.1em;
 }
 
-/* Start + info in .intro-actions (sibling of .intro-title / .intro-description) */
-.luna-canvas-row .intro-actions {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 0.5rem;
-  width: 100%;
-  min-width: 0;
-  box-sizing: border-box;
+.luna-canvas-row .wp-sidebar__title {
+  font-size: 1.875rem; /* 30px @ 16px/rem */
+  font-weight: 500;
 }
 
-.luna-canvas-row .intro-info-btn {
-  flex: 0 0 var(--sidebar-start-btn-height, 4.5rem);
-  width: var(--sidebar-start-btn-height, 4.5rem);
-  min-width: var(--sidebar-start-btn-height, 4.5rem);
-  height: var(--sidebar-start-btn-height, 4.5rem);
-  min-height: var(--sidebar-start-btn-height, 4.5rem);
-  box-sizing: border-box;
+.luna-canvas-row .wp-sidebar__description {
+  font-size: 1.5rem; /* 24px @ 16px/rem */
+  letter-spacing: -0.02em; /* -2% */
+  padding-top: 0.75rem; /* 12px @ 16px/rem — gap below intro title */
 }
 
-/*
-  Rail jitter on expand/collapse: the shell animates width under transform: scale(...); inner flex
-  relayout causes subpixel drift. Paint the rail in a sibling of .sidebar-shell (inside
-  .waypoint-sidebar) and strip visuals from the package button so clicks still hit it.
-*/
-.luna-canvas-row .sidebar-rail {
-  height: 100%;
-  min-height: 100%;
-  background: transparent;
-  border-left: 0;
-  padding-inline: 0.375rem;
-}
-
-.luna-canvas-row .sidebar-rail .rail-dot,
-.luna-canvas-row .sidebar-rail .rail-label {
-  visibility: hidden;
-}
-
-/* Scales with .waypoint-sidebar transform; keep design rem sizes */
-.luna-canvas-row > .waypoint-sidebar > .luna-rail-overlay {
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: var(--sidebar-rail-w, 6.125rem);
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-  /* Match package .sidebar-rail inset — design rem */
-  padding: 1.125rem 0.375rem;
-  background: var(--sidebar-shell-bg, #282828);
-  border-left: 0.0625rem solid rgba(255, 255, 255, 0.12);
-  box-sizing: border-box;
-  pointer-events: none;
-  z-index: 46;
-}
-
-.luna-canvas-row > .waypoint-sidebar > .luna-rail-overlay > .luna-rail-overlay__dot {
-  width: 0.375rem;
-  height: 0.375rem;
-  border-radius: 50%;
-  background: var(--global-color-1, #f9fd5e);
-  flex: 0 0 auto;
-}
-
-.luna-canvas-row > .waypoint-sidebar > .luna-rail-overlay > .luna-rail-overlay__text {
+/* Rail label diamonds */
+.luna-canvas-row .wp-sidebar__rail-label {
   position: relative;
-  writing-mode: vertical-rl;
-  text-orientation: mixed;
-  font-family: Inter, system-ui, sans-serif;
-  font-size: 0.875rem; /* 14px */
-  font-weight: 300;
-  letter-spacing: 0.3em; /* 30% */
-  text-transform: uppercase;
-  color: #fff;
-  white-space: nowrap;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
 }
 
-.luna-canvas-row > .waypoint-sidebar > .luna-rail-overlay > .luna-rail-overlay__text::before,
-.luna-canvas-row > .waypoint-sidebar > .luna-rail-overlay > .luna-rail-overlay__text::after {
+.luna-canvas-row .wp-sidebar__rail-label::before,
+.luna-canvas-row .wp-sidebar__rail-label::after {
   content: '';
   position: absolute;
   left: 50%;
-  width: 0.5rem; /* 8px */
+  width: 0.5rem;
   height: 0.5rem;
   transform: translateX(-50%);
   background: url('/Icons/sidebar/diamond.svg') center / contain no-repeat;
   pointer-events: none;
 }
 
-.luna-canvas-row > .waypoint-sidebar > .luna-rail-overlay > .luna-rail-overlay__text::before {
+.luna-canvas-row .wp-sidebar__rail-label::before {
   bottom: 100%;
-  margin-bottom: 1.25rem; /* 20px from label */
+  margin-bottom: 1.25rem;
 }
 
-.luna-canvas-row > .waypoint-sidebar > .luna-rail-overlay > .luna-rail-overlay__text::after {
+.luna-canvas-row .wp-sidebar__rail-label::after {
   top: 100%;
-  margin-top: 1.25rem; /* 20px from label */
+  margin-top: 1.25rem;
 }

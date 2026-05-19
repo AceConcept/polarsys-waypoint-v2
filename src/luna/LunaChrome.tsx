@@ -1,12 +1,17 @@
-﻿import { useLayoutEffect, useRef, useState, type ReactNode } from 'react'
+﻿import { AnimatePresence, motion } from 'framer-motion'
+import { useLayoutEffect, useRef, useState, type ReactNode } from 'react'
 import { LunaCanvasScaleContext } from 'waypoint-sidebar/src/luna-sidebar/index.js'
+import { useFlowStep } from '../store/flowStore'
 import {
   getCanvasContainScale,
-  getViewportSize,
   SIDEBAR_COLLAPSED_REM,
   SIDEBAR_EXPANDED_REM,
 } from 'waypoint-sidebar/src/luna-sidebar/canvasScale.js'
-import { applyLunaDocumentScale, resetLunaDocumentScale } from './applyLunaDocumentScale'
+import {
+  applyLunaDocumentScale,
+  getLunaScaleViewportSize,
+  resetLunaDocumentScale,
+} from './applyLunaDocumentScale'
 import { WaypointNavbar } from './WaypointNavbar'
 import './lunaChrome.css'
 
@@ -30,31 +35,23 @@ export function LunaChrome({
   const [scale, setScale] = useState(1)
   const [viewport, setViewport] = useState({ width: 0, height: 0 })
   const [expanded, setExpanded] = useState(false)
+  const { step } = useFlowStep()
 
   useLayoutEffect(() => {
-    const el = layoutRef.current
-    if (!el) return
     const update = () => {
-      const size = getViewportSize()
+      const size = getLunaScaleViewportSize()
       if (size.width <= 0 || size.height <= 0) {
         setScale(1)
         setViewport(size)
         return
       }
+      const nextScale = getCanvasContainScale(size.width, size.height)
       setViewport(size)
-      setScale(getCanvasContainScale(size.width, size.height))
+      setScale(nextScale)
     }
     update()
-    const ro = new ResizeObserver(update)
-    ro.observe(el)
     window.addEventListener('resize', update)
-    const vv = window.visualViewport
-    if (vv) vv.addEventListener('resize', update)
-    return () => {
-      ro.disconnect()
-      window.removeEventListener('resize', update)
-      if (vv) vv.removeEventListener('resize', update)
-    }
+    return () => window.removeEventListener('resize', update)
   }, [])
 
   useLayoutEffect(() => {
@@ -107,17 +104,24 @@ export function LunaChrome({
               </div>
               <div className="content">
               <div className="content-flex-strt">
-                <div className="content-story">
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={step.id}
+                    className="content-story"
+                    initial={{ opacity: 0, y: 6 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -6 }}
+                    transition={{ duration: 0.22, ease: 'easeOut' }}
+                  >
                   <div className="content-story-heading">
                     <span className="content-story-bar" aria-hidden="true" />
-                    <h2 className="content-story-title">Step one</h2>
+                    <h2 className="content-story-title">{step.title}</h2>
                   </div>
                   <div className="description">
-                    <p className="description-text">
-                      Start here with a brief overview placeholder for this milestone.
-                    </p>
+                    <p className="description-text">{step.body}</p>
                   </div>
-                </div>
+                  </motion.div>
+                </AnimatePresence>
                 <div className="content-buttons">
                   <button type="button" className="content-button content-button--fullscreen">
                     Full screen

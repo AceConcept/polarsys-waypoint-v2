@@ -1,16 +1,18 @@
 import { create } from 'zustand'
 import { STEP_DESCRIPTIONS, STEP_TITLES } from '../stepDescriptions'
 
-/** Generic numbered step ids (1–4). */
-export type FlowStepId = '1' | '2' | '3' | '4'
+/** Generic numbered step ids (1–6). */
+export type FlowStepId = '1' | '2' | '3' | '4' | '5' | '6'
 
-export const FLOW_STEP_IDS = ['1', '2', '3', '4'] as const satisfies readonly FlowStepId[]
+export const FLOW_STEP_IDS = ['1', '2', '3', '4', '5', '6'] as const satisfies readonly FlowStepId[]
 
-/** Map `#/2` … `#/4` hash segments to step ids; empty hash → step 1. */
+/** Map `#/2` … `#/6` hash segments to step ids; empty hash → step 1. */
 export function polarFlowIdFromHash(hash: string): FlowStepId {
   const m = String(hash || '').match(/#\/(\d+)/)
   const segment = m ? m[1] : ''
-  if (segment === '2' || segment === '3' || segment === '4') return segment
+  if (FLOW_STEP_IDS.includes(segment as FlowStepId)) {
+    return segment as FlowStepId
+  }
   return '1'
 }
 
@@ -19,6 +21,8 @@ export const POLAR_SYS_HASH: Record<FlowStepId, string> = {
   '2': '#/2',
   '3': '#/3',
   '4': '#/4',
+  '5': '#/5',
+  '6': '#/6',
 }
 
 export const FLOW_STEPS: {
@@ -62,7 +66,14 @@ export const useFlowStore = create<FlowState>((set, get) => ({
   },
   goToStepById: (id) => {
     const index = FLOW_STEPS.findIndex((s) => s.id === id)
-    if (index >= 0) set({ stepIndex: index })
+    if (index < 0) return
+    set({ stepIndex: index })
+    if (typeof window !== 'undefined') {
+      const hash = POLAR_SYS_HASH[id]
+      if (window.location.hash !== hash) {
+        window.location.hash = hash
+      }
+    }
   },
   reset: () => set({ stepIndex: 0 }),
 }))

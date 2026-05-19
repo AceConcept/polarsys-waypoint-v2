@@ -233,7 +233,9 @@ const PreviewStrip = forwardRef(function PreviewStrip(
               </span>
               <span className="preview-card__body">
                 <span className="preview-card__step-label">{card.step}</span>
-                <span className="preview-card__desc">{card.description}</span>
+                <span className="preview-card__desc">
+                  {card.previewDescription ?? card.description}
+                </span>
               </span>
             </button>
           ))}
@@ -323,7 +325,7 @@ function IntroSection({
             >
               <InfoIcon />
             </a>
-          ) : (
+          ) : onInfo ? (
             <button
               type="button"
               className="intro-info-btn"
@@ -334,7 +336,7 @@ function IntroSection({
             >
               <InfoIcon />
             </button>
-          )}
+          ) : null}
         </div>
       </div>
     </div>
