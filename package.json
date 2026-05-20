@@ -2,6 +2,11 @@
   "name": "waypoint-steps",
   "private": true,
   "version": "0.0.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AceConcept/waypoint-empty-v2.git"
+  },
+  "homepage": "https://github.com/AceConcept/waypoint-empty-v2",
   "type": "module",
   "engines": {
     "node": ">=20.17.0"
