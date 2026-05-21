@@ -216,10 +216,7 @@ export function WaypointSidebar({
                             aria-pressed={card.id === activeId}
                             onClick={() => selectItem(card.id)}
                           >
-                            <span
-                              className="wp-sidebar__card-media"
-                              style={{ backgroundColor: card.swatch }}
-                            >
+                            <span className="wp-sidebar__card-media">
                               {card.thumbUrl ? (
                                 <span
                                   className="wp-sidebar__thumb wp-sidebar__thumb--image"

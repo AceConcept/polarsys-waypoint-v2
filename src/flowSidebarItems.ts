@@ -17,25 +17,24 @@ export type FlowSidebarItem = {
   heroImageUrl?: string
 }
 
-function stepImagePath(n: 1 | 2 | 3 | 4 | 5 | 6): string {
-  const base = `/step_imgs/${encodeURIComponent(`Step ${n}.png`)}`
+const STEP_IMAGE_FILES: Record<1 | 2 | 3, string> = {
+  1: 'Step-1.png',
+  2: 'Step 2.png',
+  3: 'Step 3.png',
+}
+
+function stepImagePath(n: 1 | 2 | 3): string {
+  const base = `/step_imgs/${encodeURIComponent(STEP_IMAGE_FILES[n])}`
   const v = typeof __STEP_IMG_VER__ !== 'undefined' && __STEP_IMG_VER__
     ? __STEP_IMG_VER__
     : ''
   return v ? `${base}?v=${encodeURIComponent(v)}` : base
 }
 
-const SWATCHES = [
-  '#e8e4f0',
-  '#cab6e0',
-  '#dcd4ec',
-  '#e4dce8',
-  '#d8cfe8',
-  '#cfc8e0',
-] as const
+const SWATCHES = ['#e8e4f0', '#cab6e0', '#dcd4ec'] as const
 
 export const FLOW_SIDEBAR_ITEMS: FlowSidebarItem[] = FLOW_STEPS.map((step, i) => {
-  const stepNum = (i + 1) as 1 | 2 | 3 | 4 | 5 | 6
+  const stepNum = (i + 1) as 1 | 2 | 3
   const imageUrl = stepImagePath(stepNum)
   return {
     id: step.id,

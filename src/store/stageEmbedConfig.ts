@@ -1,16 +1,47 @@
-/** Generic numbered step ids (1–6). */
-export type FlowStepId = '1' | '2' | '3' | '4' | '5' | '6'
+/** Generic numbered step ids (1–3). */
+export type FlowStepId = '1' | '2' | '3'
 
-export const FLOW_STEP_IDS = ['1', '2', '3', '4', '5', '6'] as const satisfies readonly FlowStepId[]
+export const FLOW_STEP_IDS = ['1', '2', '3'] as const satisfies readonly FlowStepId[]
 
-/** Must match polar-sys hash routes on STAGE_EMBED_ORIGIN (e.g. `#/anomaly`). */
+/** Waypoint shell URL hashes (`#1` … `#3`) — not polar-sys routes. */
+export const SHELL_STEP_HASH: Record<FlowStepId, string> = {
+  '1': '#1',
+  '2': '#2',
+  '3': '#3',
+}
+
+/** polar-sys iframe hash routes on STAGE_EMBED_ORIGIN. */
 export const POLAR_SYS_HASH: Record<FlowStepId, string> = {
   '1': '#/anomaly',
-  '2': '#/anomaly',
-  '3': '#/anomaly',
-  '4': '#/anomaly',
-  '5': '#/anomaly',
-  '6': '#/anomaly',
+  '2': '#/incident',
+  '3': '#/monitor',
+}
+
+export const POLAR_ROUTE_TO_STEP: Record<string, FlowStepId> = {
+  anomaly: '1',
+  incident: '2',
+  monitor: '3',
+}
+
+export const FLOW_STEP_TO_POLAR_ROUTE: Record<FlowStepId, keyof typeof POLAR_ROUTE_TO_STEP> = {
+  '1': 'anomaly',
+  '2': 'incident',
+  '3': 'monitor',
+}
+
+export function polarRouteFromFlowStep(id: FlowStepId): string {
+  return FLOW_STEP_TO_POLAR_ROUTE[id]
+}
+
+export function flowStepFromPolarRoute(route: string): FlowStepId | null {
+  return flowStepIdFromHashSegment(route)
+}
+
+/** Resolve a hash segment to a flow step (shell `#N` or polar `#/route`). */
+export function flowStepIdFromHashSegment(segment: string): FlowStepId | null {
+  const key = segment.trim()
+  if (FLOW_STEP_IDS.includes(key as FlowStepId)) return key as FlowStepId
+  return POLAR_ROUTE_TO_STEP[key] ?? null
 }
 
 /** iframe target — https://polar-sys.vercel.app */

@@ -39,6 +39,7 @@ export default function WaypointStepsScreen() {
             <motion.div
               key="stage-embed"
               className="stepscreen-embed-shell"
+              style={{ width: '100%', height: '100%' }}
               initial={{ opacity: 1 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}

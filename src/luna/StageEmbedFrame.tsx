@@ -22,9 +22,8 @@ export function StageEmbedFrame({ src, title, className }: StageEmbedFrameProps)
     if (!frame) return
     try {
       const target = new URL(src, window.location.href).href
-      if (frame.src !== target) {
-        frame.src = src
-      }
+      const current = new URL(frame.src, window.location.href)
+      if (current.href !== target) frame.src = target
     } catch {
       frame.src = src
     }

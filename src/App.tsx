@@ -3,16 +3,10 @@ import { WaypointSidebar } from './luna/WaypointSidebar'
 import WaypointStepsScreen from './steps/WaypointStepsScreen'
 import { FLOW_SIDEBAR_ITEMS } from './flowSidebarItems'
 import { useEffect } from 'react'
+import { FLOW_STEPS, useFlowStep, useFlowStore } from './store/flowStore'
 import {
-  FLOW_STEP_IDS,
-  FLOW_STEPS,
-  useFlowStep,
-  useFlowStore,
-  type FlowStepId,
-} from './store/flowStore'
-import {
+  flowStepIdFromEmbedMessage,
   requestStageEmbedStep,
-  STAGE_EMBED_STEP_CHANGED,
 } from './store/stageEmbedBridge'
 import { getStageEmbedOrigin } from './store/stageEmbedConfig'
 import './App.css'
@@ -34,11 +28,8 @@ function App() {
     const embedOrigin = getStageEmbedOrigin()
     const onMessage = (event: MessageEvent) => {
       if (event.origin !== embedOrigin) return
-      if (event.data?.type !== STAGE_EMBED_STEP_CHANGED) return
-      const n = Number(event.data.step)
-      if (!Number.isFinite(n) || n < 1 || n > 6) return
-      const id = String(n) as FlowStepId
-      if (!FLOW_STEP_IDS.includes(id)) return
+      const id = flowStepIdFromEmbedMessage(event.data)
+      if (!id) return
       syncStepFromEmbed(id)
     }
     window.addEventListener('message', onMessage)

@@ -1,9 +1,10 @@
 import { create } from 'zustand'
 import { STEP_DESCRIPTIONS, STEP_TITLES } from '../stepDescriptions'
-import { postStageEmbedStep } from './stageEmbedBridge'
+import { navigateStageEmbedToStep, postStageEmbedStep } from './stageEmbedBridge'
 import {
   FLOW_STEP_IDS,
-  POLAR_SYS_HASH,
+  flowStepIdFromHashSegment,
+  SHELL_STEP_HASH,
   type FlowStepId,
 } from './stageEmbedConfig'
 
@@ -12,21 +13,19 @@ export {
   FLOW_STEP_IDS,
   getStageEmbedOrigin,
   POLAR_SYS_HASH,
+  SHELL_STEP_HASH,
   STAGE_EMBED_ORIGIN,
   stageEmbedUrl,
   stageEmbedUrlForStep,
 } from './stageEmbedConfig'
 
-/** Map `#1` … `#6` (or legacy `#/N`) to step ids. */
+/** Map shell `#1` … `#3` or polar `#/anomaly` etc. to step ids. */
 export function polarFlowIdFromHash(hash: string): FlowStepId {
   const segment = String(hash || '')
     .replace(/^#/, '')
     .replace(/^\//, '')
     .trim()
-  if (FLOW_STEP_IDS.includes(segment as FlowStepId)) {
-    return segment as FlowStepId
-  }
-  return '1'
+  return flowStepIdFromHashSegment(segment) ?? '1'
 }
 
 export const FLOW_STEPS: {
@@ -76,13 +75,14 @@ export const useFlowStore = create<FlowState>((set, get) => ({
     if (get().stepIndex === index) return
     set({ stepIndex: index })
     if (typeof window !== 'undefined') {
-      const hash = POLAR_SYS_HASH[id]
+      const hash = SHELL_STEP_HASH[id]
       if (window.location.hash !== hash) {
         const url = new URL(window.location.href)
         url.hash = hash
         window.history.replaceState(null, '', url)
       }
-      postStageEmbedStep(Number(id)) // no-op until slot deploy listens; src hash is primary
+      navigateStageEmbedToStep(id)
+      postStageEmbedStep(Number(id))
     }
   },
   syncStepFromEmbed: (id) => {
@@ -91,7 +91,7 @@ export const useFlowStore = create<FlowState>((set, get) => ({
     if (get().stepIndex === index) return
     set({ stepIndex: index })
     if (typeof window !== 'undefined') {
-      const hash = POLAR_SYS_HASH[id]
+      const hash = SHELL_STEP_HASH[id]
       if (window.location.hash !== hash) {
         const url = new URL(window.location.href)
         url.hash = hash
