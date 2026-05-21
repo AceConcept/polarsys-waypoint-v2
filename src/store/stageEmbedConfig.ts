@@ -3,18 +3,18 @@ export type FlowStepId = '1' | '2' | '3' | '4' | '5' | '6'
 
 export const FLOW_STEP_IDS = ['1', '2', '3', '4', '5', '6'] as const satisfies readonly FlowStepId[]
 
-/** Must match steps-project-slot hash routes (`#1` … `#6`, not `#/1`). */
+/** Must match polar-sys hash routes on STAGE_EMBED_ORIGIN (e.g. `#/anomaly`). */
 export const POLAR_SYS_HASH: Record<FlowStepId, string> = {
-  '1': '#1',
-  '2': '#2',
-  '3': '#3',
-  '4': '#4',
-  '5': '#5',
-  '6': '#6',
+  '1': '#/anomaly',
+  '2': '#/anomaly',
+  '3': '#/anomaly',
+  '4': '#/anomaly',
+  '5': '#/anomaly',
+  '6': '#/anomaly',
 }
 
-/** iframe target — https://steps-project-slot.vercel.app (#1 … #6) */
-export const STAGE_EMBED_ORIGIN = 'https://steps-project-slot.vercel.app'
+/** iframe target — https://polar-sys.vercel.app */
+export const STAGE_EMBED_ORIGIN = 'https://polar-sys.vercel.app'
 
 export function getStageEmbedOrigin(): string {
   const envOrigin = import.meta.env.VITE_STAGE_EMBED_ORIGIN as string | undefined
