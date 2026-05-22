@@ -52,6 +52,18 @@ notifyParentRoute(view);
 
 ---
 
+## Allow iframe embed (required)
+
+polar-sys sends `Content-Security-Policy: frame-ancestors …` so only listed parent sites can embed it. If Firefox shows “will not allow Firefox to display the page if another site has embedded it”, add your waypoint URL to `vercel.json` in [AceConcept/polar-sys](https://github.com/AceConcept/polar-sys):
+
+```json
+"value": "frame-ancestors 'self' https://polarsys-waypoint-v2.guildconcept.workers.dev https://polarsys-waypoint-v2.vercel.app https://*.vercel.app http://localhost:5173 http://localhost:5174;"
+```
+
+Production shell: [polarsys-waypoint-v2.guildconcept.workers.dev](https://polarsys-waypoint-v2.guildconcept.workers.dev/)
+
+Redeploy polar-sys after changing headers.
+
 ## Deploy
 
 1. Commit and push polar-sys, redeploy [polar-sys.vercel.app](https://polar-sys.vercel.app).
