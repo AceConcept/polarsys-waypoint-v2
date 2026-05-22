@@ -468,6 +468,7 @@
   letter-spacing: 0.06em; /* 4% */
   text-transform: uppercase;
   color: #fff;
+  text-decoration: none;
   cursor: pointer;
 }
 

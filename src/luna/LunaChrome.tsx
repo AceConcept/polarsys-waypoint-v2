@@ -193,6 +193,12 @@ export function LunaChrome({
                   >
                     Full screen
                   </button>
+                  <a
+                    className="content-button content-button--case-study"
+                    href="https://www.atencium-ui.com/design-gallery/polar-systems"
+                  >
+                    Case study
+                  </a>
                 </div>
               </div>
             </div>
