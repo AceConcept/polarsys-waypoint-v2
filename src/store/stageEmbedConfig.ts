@@ -44,8 +44,8 @@ export function flowStepIdFromHashSegment(segment: string): FlowStepId | null {
   return POLAR_ROUTE_TO_STEP[key] ?? null
 }
 
-/** iframe target — https://polar-sys.vercel.app */
-export const STAGE_EMBED_ORIGIN = 'https://polar-sys.vercel.app'
+/** iframe target — https://polarsysv2.guildconcept.workers.dev */
+export const STAGE_EMBED_ORIGIN = 'https://polarsysv2.guildconcept.workers.dev'
 
 export function getStageEmbedOrigin(): string {
   const envOrigin = import.meta.env.VITE_STAGE_EMBED_ORIGIN as string | undefined
