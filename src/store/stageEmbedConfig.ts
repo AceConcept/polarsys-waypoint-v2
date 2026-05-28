@@ -55,7 +55,9 @@ export function getStageEmbedOrigin(): string {
 
 export function stageEmbedUrl(polarHash: string): string {
   const base = getStageEmbedOrigin().replace(/\/$/, '')
-  return `${base}${polarHash}`
+  const hash = polarHash.startsWith('#') ? polarHash : `#${polarHash}`
+  /* SPA-style: https://polarsysv2.guildconcept.workers.dev/#/monitor */
+  return `${base}/${hash}`
 }
 
 export function stageEmbedUrlForStep(id: FlowStepId): string {

@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 import { STEP_DESCRIPTIONS, STEP_TITLES } from '../stepDescriptions'
-import { navigateStageEmbedToStep, postStageEmbedStep } from './stageEmbedBridge'
+import { navigateStageEmbedToStep } from './stageEmbedBridge'
 import {
   FLOW_STEP_IDS,
   flowStepIdFromHashSegment,
@@ -72,8 +72,7 @@ export const useFlowStore = create<FlowState>((set, get) => ({
   goToStepById: (id) => {
     const index = FLOW_STEPS.findIndex((s) => s.id === id)
     if (index < 0) return
-    if (get().stepIndex === index) return
-    set({ stepIndex: index })
+    if (get().stepIndex !== index) set({ stepIndex: index })
     if (typeof window !== 'undefined') {
       const hash = SHELL_STEP_HASH[id]
       if (window.location.hash !== hash) {
@@ -82,7 +81,6 @@ export const useFlowStore = create<FlowState>((set, get) => ({
         window.history.replaceState(null, '', url)
       }
       navigateStageEmbedToStep(id)
-      postStageEmbedStep(Number(id))
     }
   },
   syncStepFromEmbed: (id) => {

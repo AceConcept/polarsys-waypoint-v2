@@ -4,11 +4,6 @@ import WaypointStepsScreen from './steps/WaypointStepsScreen'
 import { FLOW_SIDEBAR_ITEMS } from './flowSidebarItems'
 import { useEffect } from 'react'
 import { FLOW_STEPS, useFlowStep, useFlowStore } from './store/flowStore'
-import {
-  flowStepIdFromEmbedMessage,
-  requestStageEmbedStep,
-} from './store/stageEmbedBridge'
-import { getStageEmbedOrigin } from './store/stageEmbedConfig'
 import './App.css'
 
 const RAIL_LABEL = 'Waypoint guide'
@@ -16,30 +11,12 @@ const RAIL_LABEL = 'Waypoint guide'
 function App() {
   const { step, stepIndex } = useFlowStep()
   const goToStepById = useFlowStore((s) => s.goToStepById)
-  const syncStepFromEmbed = useFlowStore((s) => s.syncStepFromEmbed)
 
   useEffect(() => {
     const { stepIndex } = useFlowStore.getState()
     const initial = FLOW_STEPS[stepIndex]
     if (initial) goToStepById(initial.id)
   }, [goToStepById])
-
-  useEffect(() => {
-    const embedOrigin = getStageEmbedOrigin()
-    const onMessage = (event: MessageEvent) => {
-      if (event.origin !== embedOrigin) return
-      const id = flowStepIdFromEmbedMessage(event.data)
-      if (!id) return
-      syncStepFromEmbed(id)
-    }
-    window.addEventListener('message', onMessage)
-    return () => window.removeEventListener('message', onMessage)
-  }, [syncStepFromEmbed])
-
-  useEffect(() => {
-    const poll = window.setInterval(() => requestStageEmbedStep(), 400)
-    return () => window.clearInterval(poll)
-  }, [])
 
   if (typeof window !== 'undefined') {
     try {

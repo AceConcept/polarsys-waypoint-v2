@@ -1,6 +1,5 @@
 import { useEffect, useRef } from 'react'
-import { postStageEmbedStep, registerStageEmbedFrame } from '../store/stageEmbedBridge'
-import { useFlowStore } from '../store/flowStore'
+import { registerStageEmbedFrame } from '../store/stageEmbedBridge'
 
 type StageEmbedFrameProps = {
   src: string
@@ -38,10 +37,6 @@ export function StageEmbedFrame({ src, title, className }: StageEmbedFrameProps)
       allow="fullscreen"
       loading="eager"
       referrerPolicy="strict-origin-when-cross-origin"
-      onLoad={() => {
-        const { stepIndex } = useFlowStore.getState()
-        postStageEmbedStep(stepIndex + 1)
-      }}
     />
   )
 }

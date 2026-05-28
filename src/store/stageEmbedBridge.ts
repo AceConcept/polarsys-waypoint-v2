@@ -1,17 +1,11 @@
 import {
-  FLOW_STEP_IDS,
   flowStepFromPolarRoute,
-  getStageEmbedOrigin,
-  polarRouteFromFlowStep,
   stageEmbedUrlForStep,
-  type FlowStepId,
+  type FlowStepId
 } from './stageEmbedConfig'
 
-export const STAGE_EMBED_SET_STEP = 'atencium-set-step' as const
 /** iframe → shell when user changes step inside the embed */
 export const STAGE_EMBED_STEP_CHANGED = 'atencium-step-changed' as const
-/** shell asks iframe for current step (polling fallback) */
-export const STAGE_EMBED_REQUEST_STEP = 'atencium-request-step' as const
 
 let stageIframe: HTMLIFrameElement | null = null
 
@@ -19,13 +13,10 @@ export function registerStageEmbedFrame(frame: HTMLIFrameElement | null) {
   stageIframe = frame
 }
 
-function embedTargetOrigin(): string {
-  if (!stageIframe?.src) return getStageEmbedOrigin()
-  try {
-    return new URL(stageIframe.src, window.location.href).origin
-  } catch {
-    return getStageEmbedOrigin()
-  }
+/** Ensure iframe sync only trusts messages from the active registered frame. */
+export function isStageEmbedMessageSource(source: MessageEventSource | null): boolean {
+  const win = stageIframe?.contentWindow
+  return !!win && source === win
 }
 
 /** Navigate the registered iframe to the polar-sys route for this step. */
@@ -42,7 +33,7 @@ export function navigateStageEmbedToStep(id: FlowStepId) {
   }
 }
 
-/** Parse iframe → shell step message (`step` and/or polar `route`). */
+/** Parse iframe → shell step message from explicit route/hash only. */
 export function flowStepIdFromEmbedMessage(data: unknown): FlowStepId | null {
   if (!data || typeof data !== 'object') return null
   const payload = data as { type?: string; step?: number; route?: string; hash?: string }
@@ -61,29 +52,5 @@ export function flowStepIdFromEmbedMessage(data: unknown): FlowStepId | null {
     }
   }
 
-  const n = Number(payload.step)
-  if (Number.isFinite(n) && n >= 1 && n <= FLOW_STEP_IDS.length) {
-    const id = String(n) as FlowStepId
-    if (FLOW_STEP_IDS.includes(id)) return id
-  }
-
   return null
-}
-
-export function postStageEmbedStep(step: number) {
-  const win = stageIframe?.contentWindow
-  if (!win) return
-  const id = String(step) as FlowStepId
-  const route = FLOW_STEP_IDS.includes(id) ? polarRouteFromFlowStep(id) : undefined
-  win.postMessage(
-    { type: STAGE_EMBED_SET_STEP, step, ...(route ? { route } : {}) },
-    embedTargetOrigin(),
-  )
-}
-
-/** Ask the iframe to report its current step (requires updated steps-project-slot). */
-export function requestStageEmbedStep() {
-  const win = stageIframe?.contentWindow
-  if (!win) return
-  win.postMessage({ type: STAGE_EMBED_REQUEST_STEP }, embedTargetOrigin())
 }

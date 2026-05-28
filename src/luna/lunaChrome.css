@@ -529,6 +529,7 @@
 .luna-space-left .description-text {
   max-width: 100%;
   margin: 0;
+  white-space: pre-line;
   box-sizing: border-box;
   font-family: Inter, system-ui, sans-serif;
   font-size: 1.2rem; /* 20px @ 16px/rem */
