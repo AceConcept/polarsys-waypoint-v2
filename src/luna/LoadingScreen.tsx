@@ -21,11 +21,13 @@ import './loadingScreen.css'
  *   1. index.html sets “hide the app” before React loads (loadscreen-active).
  *   2. This component is drawn on document.body (outside the app tree) so the
  *      app cannot cover it or interfere with it.
- *   3. The sweep and fade use CSS animation-delay — the browser runs them on a
+ *   3. Background PNG preloads first; progress bar + CSS sweep/fade start only after
+ *      `loadscreen--bg-ready` (5s timeout fallback if the image fails).
+ *   4. The sweep and fade use CSS animation-delay — the browser runs them on a
  *      clock from first paint. React only updates the 0–100% progress number.
- *   4. When the fade begins, we show the app behind the curtain so the fade
+ *   5. When the fade begins, we show the app behind the curtain so the fade
  *      reveals the already-loaded page instead of a white background.
- *   5. When the fade ends, this component unmounts and the curtain is gone.
+ *   6. When the fade ends, this component unmounts and the curtain is gone.
  *
  * Preview mode (?loadscreen=hold): frozen frame for design review, no sweep.
  */
@@ -36,6 +38,8 @@ type LoadingScreenProps = {
   onComplete?: () => void
 }
 
+const LOADSCREEN_BG_URL = '/loadingscrn/ldingBG.png'
+const BG_LOAD_TIMEOUT_MS = 5000
 const PROGRESS_MS = 2000
 const PAUSE_MS = 80
 const SWEEP_MS_MIN = 300
@@ -63,6 +67,7 @@ export function LoadingScreen({
   progress: holdProgress = 56,
   onComplete,
 }: LoadingScreenProps) {
+  const [bgReady, setBgReady] = useState(hold)
   const [simProgress, setSimProgress] = useState(0)
   const shutterRef = useRef<HTMLDivElement>(null)
   const onCompleteRef = useRef(onComplete)
@@ -93,7 +98,34 @@ export function LoadingScreen({
   }, [hold])
 
   useEffect(() => {
-    if (hold) return
+    if (hold) {
+      setBgReady(true)
+      return
+    }
+
+    let cancelled = false
+    const img = new Image()
+    const finish = () => {
+      if (!cancelled) setBgReady(true)
+    }
+
+    img.onload = finish
+    img.onerror = finish
+    img.src = LOADSCREEN_BG_URL
+    if (img.complete) finish()
+
+    const timeout = window.setTimeout(finish, BG_LOAD_TIMEOUT_MS)
+
+    return () => {
+      cancelled = true
+      window.clearTimeout(timeout)
+      img.onload = null
+      img.onerror = null
+    }
+  }, [hold])
+
+  useEffect(() => {
+    if (hold || !bgReady) return
 
     const start = performance.now()
     let frame = 0
@@ -107,10 +139,10 @@ export function LoadingScreen({
 
     frame = requestAnimationFrame(tick)
     return () => cancelAnimationFrame(frame)
-  }, [hold])
+  }, [hold, bgReady])
 
   useEffect(() => {
-    if (hold) return
+    if (hold || !bgReady) return
 
     const finish = () => {
       if (finishedRef.current) return
@@ -150,12 +182,12 @@ export function LoadingScreen({
       window.clearTimeout(revealTimer)
       window.clearTimeout(fallback)
     }
-  }, [hold, fadeDelayMs, totalMs])
+  }, [hold, bgReady, fadeDelayMs, totalMs])
 
   const shutter = (
     <div
       ref={shutterRef}
-      className={`loadscreen${hold ? '' : ' loadscreen--sequence'}`}
+      className={`loadscreen${bgReady ? ' loadscreen--bg-ready' : ''}${!hold && bgReady ? ' loadscreen--sequence' : ''}`}
       role="progressbar"
       aria-valuenow={progress}
       aria-valuemin={0}
