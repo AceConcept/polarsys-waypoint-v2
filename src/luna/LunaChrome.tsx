@@ -162,7 +162,7 @@ export function LunaChrome({ children, footerBackgroundUrl }: LunaChromeProps) {
                       </button>
                       <a
                         className="content-button content-button--case-study"
-                        href="https://www.atencium-ui.com/design-gallery/polar-systems"
+                        href="https://atencium-ui.com/#gallery/polar-systems"
                       >
                         Case study
                       </a>
